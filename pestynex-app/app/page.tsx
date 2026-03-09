@@ -1,19 +1,18 @@
 export default function Home() {
   return (
-    <main style={{padding:40,fontFamily:"Arial"}}>
-      <h1>Pestynex ERP Dashboard</h1>
+    <main style={{padding: "40px", fontFamily: "Arial"}}>
+      <h1>Pestynex ERP</h1>
+      <p>Welcome to Pestynex Pest Control Management System</p>
 
-      <p>Welcome to the Pestynex Pest Control Management System</p>
-
-      <h3>Modules</h3>
+      <h2>Modules</h2>
 
       <ul>
-        <li>Clients</li>
-        <li>Technicians</li>
+        <li>Customers</li>
         <li>Service Jobs</li>
-        <li>Inspections</li>
+        <li>Technicians</li>
         <li>Invoices</li>
+        <li>Reports</li>
       </ul>
     </main>
-  );
+  )
 }
