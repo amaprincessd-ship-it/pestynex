@@ -18,12 +18,17 @@ export default function Home() {
   }
 
   async function addCustomer() {
+
     if (!name) return
 
-    await supabase.from("customers").insert([{ name }])
+    const { error } = await supabase.from("customers").insert([
+      { name }
+    ])
 
-    setName("")
-    fetchCustomers()
+    if (!error) {
+      setName("")
+      fetchCustomers()
+    }
   }
 
   return (
