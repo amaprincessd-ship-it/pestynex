@@ -9,24 +9,33 @@ export default function Home() {
   const [customers, setCustomers] = useState<any[]>([])
 
   useEffect(() => {
-    fetchCustomers()
+    loadCustomers()
   }, [])
 
-  async function fetchCustomers() {
-    const { data } = await supabase.from("customers").select("*")
-    if (data) setCustomers(data)
+  async function loadCustomers() {
+
+    const { data } = await supabase
+      .from("customers")
+      .select("*")
+      .order("created_at", { ascending: false })
+
+    if (data) {
+      setCustomers(data)
+    }
   }
 
   async function addCustomer() {
 
     if (!name) return
 
-    await supabase.from("customers").insert([
-      { name }
-    ])
+    const { error } = await supabase
+      .from("customers")
+      .insert([{ name }])
 
-    setName("")
-    fetchCustomers()
+    if (!error) {
+      setName("")
+      loadCustomers()
+    }
   }
 
   return (
@@ -42,7 +51,10 @@ export default function Home() {
         onChange={(e) => setName(e.target.value)}
       />
 
-      <button onClick={addCustomer} style={{ marginLeft: "10px" }}>
+      <button
+        onClick={addCustomer}
+        style={{ marginLeft: "10px" }}
+      >
         Add
       </button>
 
@@ -52,8 +64,10 @@ export default function Home() {
         <p>No customers yet</p>
       ) : (
         <ul>
-          {customers.map((c) => (
-            <li key={c.id}>{c.name}</li>
+          {customers.map((customer) => (
+            <li key={customer.id}>
+              {customer.name}
+            </li>
           ))}
         </ul>
       )}
