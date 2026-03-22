@@ -5,75 +5,100 @@ import { supabase } from "@/lib/supabaseClient"
 
 export default function ClientsPage() {
 
-  const [customers, setCustomers] = useState<any[]>([])
-  const [name, setName] = useState("")
-  const [loading, setLoading] = useState(true)
+  const [customers, setCustomers] =
+    useState<any[]>([])
+
+  const [name, setName] =
+    useState("")
+
+  const [ready, setReady] =
+    useState(false)
 
   useEffect(() => {
+
     if (!supabase) return
+
+    setReady(true)
+
     loadCustomers()
+
   }, [])
 
   async function loadCustomers() {
 
-    const { data, error } =
+    const { data } =
       await supabase!
         .from("customers")
         .select("*")
 
-    if (!error && data) {
+    if (data)
       setCustomers(data)
-    }
 
-    setLoading(false)
   }
 
   async function addCustomer() {
 
-    if (!name) return
+    if (!name || !supabase)
+      return
 
-    await supabase!
+    await supabase
       .from("customers")
       .insert([{ name }])
 
     setName("")
 
     loadCustomers()
+
   }
 
   return (
 
-    <main style={{ padding: 40 }}>
+    <main style={{ padding:40 }}>
 
       <h1>Pestynex ERP</h1>
 
       <h2>Customers Module</h2>
 
-      <input
-        placeholder="Customer name"
-        value={name}
-        onChange={(e)=>setName(e.target.value)}
-      />
+      {!ready && (
+        <p>Connecting to database...</p>
+      )}
 
-      <button onClick={addCustomer}>
-        Add Customer
-      </button>
+      {ready && (
 
-      <h3>Customer List</h3>
+        <>
 
-      {loading && <p>Loading...</p>}
+          <input
+            placeholder="Customer name"
+            value={name}
+            onChange={(e)=>
+              setName(e.target.value)
+            }
+          />
 
-      <ul>
+          <button
+            onClick={addCustomer}
+          >
+            Add Customer
+          </button>
 
-        {customers.map((c)=>(
-          <li key={c.id}>
-            {c.name}
-          </li>
-        ))}
+          <h3>Customer List</h3>
 
-      </ul>
+          <ul>
+
+            {customers.map(c=>(
+              <li key={c.id}>
+                {c.name}
+              </li>
+            ))}
+
+          </ul>
+
+        </>
+
+      )}
 
     </main>
 
   )
+
 }
