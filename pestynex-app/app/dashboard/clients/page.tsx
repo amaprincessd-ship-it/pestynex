@@ -32,7 +32,8 @@ export default function ClientsPage() {
     if (!name) return
 
     await supabase!
-      .from("customers")
+    .from("customers")
+    .select("id,name,created_at")
       .insert([{ name }])
 
     setName("")
