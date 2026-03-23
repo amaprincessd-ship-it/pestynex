@@ -4,22 +4,28 @@ export default function Home() {
 
   return (
 
-    <main style={{ padding: 40 }}>
+    <main style={{
+      padding:40,
+      fontFamily:"Arial",
+      textAlign:"center"
+    }}>
 
       <h1>Pestynex ERP</h1>
 
-      <p>System deployment successful</p>
+      <p>
+        System deployment successful
+      </p>
 
       <Link href="/dashboard/clients">
 
-        <button
-          style={{
-            padding: "10px 20px",
-            marginTop: "20px",
-            cursor: "pointer"
-          }}
-        >
-          Go to Customer Module
+        <button style={{
+          padding:"12px 24px",
+          marginTop:20,
+          cursor:"pointer"
+        }}>
+
+          Open Customer Module
+
         </button>
 
       </Link>

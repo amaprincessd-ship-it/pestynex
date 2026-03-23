@@ -5,23 +5,13 @@ import { supabase } from "@/lib/supabaseClient"
 
 export default function ClientsPage() {
 
-  const [customers, setCustomers] =
-    useState<any[]>([])
-
-  const [name, setName] =
-    useState("")
-
-  const [ready, setReady] =
-    useState(false)
+  const [customers, setCustomers] = useState<any[]>([])
+  const [name, setName] = useState("")
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-
     if (!supabase) return
-
-    setReady(true)
-
     loadCustomers()
-
   }, [])
 
   async function loadCustomers() {
@@ -31,17 +21,17 @@ export default function ClientsPage() {
         .from("customers")
         .select("*")
 
-    if (data)
-      setCustomers(data)
+    if (data) setCustomers(data)
+
+    setLoading(false)
 
   }
 
   async function addCustomer() {
 
-    if (!name || !supabase)
-      return
+    if (!name) return
 
-    await supabase
+    await supabase!
       .from("customers")
       .insert([{ name }])
 
@@ -53,49 +43,72 @@ export default function ClientsPage() {
 
   return (
 
-    <main style={{ padding:40 }}>
+    <main style={{
+      padding:40,
+      fontFamily:"Arial",
+      maxWidth:600,
+      margin:"auto"
+    }}>
 
       <h1>Pestynex ERP</h1>
 
       <h2>Customers Module</h2>
 
-      {!ready && (
-        <p>Connecting to database...</p>
-      )}
+      <div style={{
+        display:"flex",
+        gap:10,
+        marginBottom:20
+      }}>
 
-      {ready && (
+        <input
+          placeholder="Customer name"
+          value={name}
+          onChange={(e)=>setName(e.target.value)}
+          style={{
+            flex:1,
+            padding:10
+          }}
+        />
 
-        <>
+        <button
+          onClick={addCustomer}
+          style={{
+            padding:"10px 20px"
+          }}
+        >
 
-          <input
-            placeholder="Customer name"
-            value={name}
-            onChange={(e)=>
-              setName(e.target.value)
-            }
-          />
+          Add
 
-          <button
-            onClick={addCustomer}
+        </button>
+
+      </div>
+
+      <h3>Customer List</h3>
+
+      {loading && <p>Loading...</p>}
+
+      <ul style={{
+        listStyle:"none",
+        padding:0
+      }}>
+
+        {customers.map((c)=>(
+          <li
+            key={c.id}
+            style={{
+              padding:10,
+              border:"1px solid #ddd",
+              marginBottom:8,
+              borderRadius:6
+            }}
           >
-            Add Customer
-          </button>
 
-          <h3>Customer List</h3>
+            {c.name}
 
-          <ul>
+          </li>
+        ))}
 
-            {customers.map(c=>(
-              <li key={c.id}>
-                {c.name}
-              </li>
-            ))}
-
-          </ul>
-
-        </>
-
-      )}
+      </ul>
 
     </main>
 
