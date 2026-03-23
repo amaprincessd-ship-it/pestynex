@@ -1,4 +1,7 @@
+import Link from "next/link"
+
 export default function Home() {
+
   return (
 
     <main style={{ padding: 40 }}>
@@ -7,13 +10,22 @@ export default function Home() {
 
       <p>System deployment successful</p>
 
-      <a href="/dashboard/clients">
+      <Link href="/dashboard/clients">
 
-        Go to Customer Module
+        <button
+          style={{
+            padding: "10px 20px",
+            marginTop: "20px",
+            cursor: "pointer"
+          }}
+        >
+          Go to Customer Module
+        </button>
 
-      </a>
+      </Link>
 
     </main>
 
   )
+
 }
